@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/apkreduce.iml" filepath="$PROJECT_DIR$/.idea/apkreduce.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/convertWebp/convertWebp.iml" filepath="$PROJECT_DIR$/convertWebp/convertWebp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/minio-buildcache.iml" filepath="$PROJECT_DIR$/.idea/modules/minio-buildcache.iml" group="minio-buildcache" />
     </modules>
   </component>
 </project>
