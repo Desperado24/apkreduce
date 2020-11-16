@@ -1,4 +1,3 @@
-# AndroidWebP-GradlePlugin
 一款支持自动将图片转换成WebP格式的Android构建插件
 
 ### 功能：
@@ -11,29 +10,17 @@
 1. 引用插件
     ```
     buildscript {
-        repositories {
-            maven {
-                url 'https://dl.bintray.com/zh8637688/maven/'
-            }
-        }
         dependencies {
-            classpath 'cz.gradle.android:webp:0.0.1'
+            classpath "com.desperado.apkreduce:apkreduce:1.0.6"
         }
     }
-    ```
-2. 应用plugin
-    ```
-    apply plugin: 'cz.webp'
-    ```
-3. 配置
-    ```
-    WebPAndroid {
-        autoConvert true
-        quality 75
-    }
-    ```
+     apply plugin: 'apkreduce.convertwebp'
+     convertWebpConfig {
+             autoConvert true
+             quality 75
+         }
 
-4. 构建
+2. 构建
     ```
     autoConvert = true:         ./gradlew build
 
@@ -47,8 +34,5 @@ quality | int | 75 | 指定转换过程中RGB通道的压缩因，取值范围0�
 autoConvert | boolean | false | 若设置为true，转换任务将自动加入构建过程，执行gradle build即可；若设置为false，需手动执行gradle convertWebP。
 
 ### 构建产物：
-- ```autoConvert = true```，sourSets.res指定资源文件夹中所有jpg、png（非.9）图片将被转换为webp格式，原有图片将移动到```projectDir/ori_res```目录中。
-- ```autoConvert = false```，原有图片路径不改变，转换后的webp图片位于```projectDir/webp```目录中。
-
-### TODO：
-自动模式下暂不支持增量构建（convertWebP任务的输出会改变输入属性。将输出路径设置在build目录下，并在其他任务中屏蔽原先的图片即可）
+- ```autoConvert = true```，sourSets.res指定资源文件夹中所有jpg、png（非.9）图片将被转换为webp格式，原有图片将移动到```projectDir/before_convertwebp_res```目录中。
+- ```autoConvert = false```，原有图片路径不改变，转换后的webp图片位于```projectDir/before_convertwebp_res```目录中。

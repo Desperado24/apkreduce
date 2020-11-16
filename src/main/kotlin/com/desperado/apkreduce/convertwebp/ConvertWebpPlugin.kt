@@ -47,6 +47,7 @@ class ConvertWebpPlugin : Plugin<Project> {
         Logger.initialize(project.getLogger())
 
         val libFileName = libFileName
+        Logger.i("libFileName" + libFileName)
 
         if (libFileName != null) {
             project.afterEvaluate({ p ->
@@ -59,12 +60,14 @@ class ConvertWebpPlugin : Plugin<Project> {
                 val decompressTask = createDecompressTask(p, downloadFilePath)
 
                 val variantsName = getVariantsName(p)
+                Logger.i("variantsName" + variantsName)
                 for (variantName in variantsName) {
                     val convertTask = createConvertTask(
                         p,
                         variantName, getCWebPPath(downloadDir),
                         extension.isAutoConvert, extension.quality
                     )
+                    Logger.i("variantsName" + convertTask.name)
                     convertTask.dependsOn(decompressTask.dependsOn(downloadTask))
 
                     if (extension.isAutoConvert) {
@@ -117,7 +120,9 @@ class ConvertWebpPlugin : Plugin<Project> {
 
     private fun attachCovertTaskToBuild(project: Project, variant: String, convertTask: Task) {
         val nameOfMergeResources = "merge" + StringHelper.capitalize(variant) + "Resources"
+        Logger.i("attachCovertTaskToBuild variant" + variant + "nameOfMergeResources:" + nameOfMergeResources)
         val mergeResources = project.getTasks().findByName(nameOfMergeResources)
+        Logger.i("attachCovertTaskToBuild mergeResources" + mergeResources.name)
         mergeResources.dependsOn(convertTask)
     }
 

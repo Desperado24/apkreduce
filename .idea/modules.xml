@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apkreduce.iml" filepath="$PROJECT_DIR$/.idea/modules/apkreduce.iml" group="apkreduce" />
-      <module fileurl="file://$PROJECT_DIR$/convertWebp/convertWebp.iml" filepath="$PROJECT_DIR$/convertWebp/convertWebp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apkreduce.iml" filepath="$PROJECT_DIR$/.idea/modules/apkreduce.iml" />
     </modules>
   </component>
 </project>

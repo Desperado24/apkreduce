@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="com.desperado.apkreduce" module="apkreduce" revision="0.0.1" status="integration" default="true" publication="20191213194953"/>
+  <info organisation="com.desperado.apkreduce" module="apkreduce" revision="1.0.6" status="integration" default="true" publication="20201023161038"/>
   <configurations>
     <conf name="archives" visibility="public"/>
     <conf name="compile" visibility="private"/>

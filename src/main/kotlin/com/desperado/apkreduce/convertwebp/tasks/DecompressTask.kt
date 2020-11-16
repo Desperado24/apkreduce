@@ -11,9 +11,6 @@ import java.io.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.ZipFile
 
-/**
- * @author haozhou
- */
 
 open class DecompressTask : DefaultTask() {
     private var srcFilePath: String? = null

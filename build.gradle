@@ -1,20 +1,28 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
 
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     }
 }
 
+
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.2.21'
+    id "com.gradle.plugin-publish" version "0.10.1"
     id 'java-gradle-plugin'
 }
 
 apply plugin: 'groovy'
-apply from: 'bintray.gradle'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 project.extensions.kotlinVersion='1.2.21'
 
@@ -25,6 +33,7 @@ repositories {
 
 dependencies {
     compile gradleApi()
+    compile localGroovy() //groovy sdk
     compile 'com.android.tools.build:gradle:2.3.3'
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
@@ -35,3 +44,144 @@ compileKotlin{
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+// Use java-gradle-plugin to generate plugin descriptors and specify plugin ids
+gradlePlugin {
+    plugins {
+        greetingsPlugin {
+            id = "$group"
+            implementationClass = 'com.desperado.apkreduce.webp.WebPAndroidPlugin'
+        }
+    }
+}
+//发布到 https://plugins.gradle.org
+pluginBundle {
+    // These settings are set for the whole plugin bundle
+    website = 'https://github.com/Desperado24/apkreduce'
+    vcsUrl = 'https://github.com/Desperado24/apkreduce.git'
+    tags = ['Android', 'Gradle', 'plugin']
+    description = 'Convert img to webp !'
+
+    plugins {
+        greetingsPlugin {
+            // id is captured from java-gradle-plugin configuration
+            displayName = 'convertwebp'
+            tags = ['Android', 'Gradle', 'plugin']
+            version = "$version"
+        }
+
+    }
+
+    mavenCoordinates {
+        groupId = "$group"
+        artifactId = "$artifactId"
+        version = "$version"
+    }
+}
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //提交到远程服务器：
+            // repository(url: "http://www.xxx.com/repos") {
+            //    authentication(userName: "admin", password: "admin")
+            // }
+            repository(url: uri('./repo'))
+            pom.groupId = "$group"
+            pom.artifactId = "$artifactId"
+            pom.version = "$version"
+        }
+    }
+}
+
+
+group = "$group"
+version = "$version"
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+javadoc.failOnError = false
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "desperadoliuxun"
+            name "desperadoliuxun"
+            email "desperadoliuxun@gmail.com"
+        }
+    }
+
+    scm {
+        url "https://github.com/Desperado24/apkreduce"
+        connection "https://github.com/Desperado24/apkreduce.git"
+    }
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar {
+                classifier "sources"
+            }
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+            groupId "$group"
+            artifactId "$artifactId"
+            version "$version"
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'a gradle plugin that converting image to webp for android build')
+                root.appendNode('name', 'convertwebp')
+                root.appendNode('url', 'https://github.com/Desperado24/apkreduce')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+Properties properties = new Properties()
+def file = project.rootProject.file('local.properties')
+if (file.exists()) {
+    properties.load(file.newDataInputStream())
+}
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    publish = true
+    pkg {
+        userOrg = properties.getProperty("bintray.userOrgId")
+        repo = "maven"
+        name = "apkreduce"
+        vcsUrl = 'https://github.com/Desperado24/apkreduce.git'
+        labels = ['gradle', 'plugin', 'android', 'apkreduce']
+        licenses = ['Apache-2.0']
+        version {
+            name = "$version"
+        }
+    }
+}
+

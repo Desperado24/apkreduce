@@ -3,10 +3,8 @@ package com.desperado.apkreduce.convertwebp.tasks
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.internal.api.DefaultAndroidSourceSet
-import com.android.ddmlib.Log
 import com.desperado.apkreduce.convertwebp.ConvertWebpPlugin
 import com.desperado.apkreduce.convertwebp.util.Logger
-
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -14,22 +12,18 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.os.OperatingSystem
-
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
 
 
-/**
- * @author haozhou
- */
 
 open class ConvertTask : DefaultTask() {
     @get:Input
     var quality: Int = 0
         private set
     @get:Input
-    var isAutoConvert: Boolean = false
+    var isAutoConvert: Boolean = false/**/
         private set
     private var cwebpPath: String? = null
     private var projectRootPath: String? = null
@@ -56,11 +50,12 @@ open class ConvertTask : DefaultTask() {
     @Throws(Exception::class)
     fun convert() {
         getPermissionForMac()
-
+        Logger.i("attachCovertTaskToBuild drawableDirs" + drawableDirs.toString())
         for (drawableDir in drawableDirs!!) {
             val drawableFiles = drawableDir.listFiles()
             if (drawableFiles != null) {
                 for (drawableFile in drawableFiles!!) {
+                    Logger.i("attachCovertTaskToBuild drawableFile" + drawableFile.absolutePath)
                     if (canConvert(drawableFile)) {
                         val srcName = drawableFile.getName()
                         val dotIndex = srcName.lastIndexOf(".")

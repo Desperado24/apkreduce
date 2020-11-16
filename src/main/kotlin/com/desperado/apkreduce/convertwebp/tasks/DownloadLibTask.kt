@@ -15,9 +15,6 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-/**
- * @author haozhou
- */
 
 open class DownloadLibTask : DefaultTask() {
     private var downloadUrl: String? = null
